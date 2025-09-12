@@ -14,11 +14,11 @@ World's First Public Dataset For Autonomous Trucking
 </div>
 
 ## Overview
-- [Website](#🌐-website)
-- [Installation](#💾-installation)
-- [Setup](#🔨-setup)
-- [Usage](#🚀-usage)
-- [Citation](#📄-citation)
+- [Website](#website)
+- [Installation](#installation)
+- [Setup](#setup)
+- [Usage](#usage)
+- [Citation](#citation)
 
 <div id="website"></div>  
 
