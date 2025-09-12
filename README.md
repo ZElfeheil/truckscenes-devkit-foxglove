@@ -20,11 +20,6 @@ World's First Public Dataset For Autonomous Trucking
 - [Usage](#🚀-usage)
 - [Citation](#📄-citation)
 
-<<<<<<< Updated upstream
-## 🌐 Website
-To read more about the dataset or download it, please visit [https://www.man.eu/truckscenes](https://www.man.eu/truckscenes)
-
-=======
 <div id="website"></div>  
 
 ## 🌐 Website
@@ -32,7 +27,6 @@ To read more about the dataset or download it, please visit [https://www.man.eu/
 
 <div id="installation"></div>  
 
->>>>>>> Stashed changes
 ## 💾 Installation
 Our devkit is available and can be installed via pip:
 ```
@@ -46,11 +40,8 @@ pip install "truckscenes-devkit[all]"
 
 For more details on the installation see [installation](./docs/installation.md)
 
-<<<<<<< Updated upstream
-=======
 <div id="setup"></div> 
 
->>>>>>> Stashed changes
 ## 🔨 Setup
 Download **all** archives from our [download page](https://www.man.eu/truckscenes/) or the [AWS Open Data Registry](https://registry.opendata.aws/).  
 
@@ -63,11 +54,8 @@ Eventually you should have the following folder structure:
     v1.0-*	-	JSON tables that include all the meta data and annotations. Each split (trainval, test, mini) is provided in a separate folder.
 ```
 
-<<<<<<< Updated upstream
-=======
 <div id="usage"></div> 
 
->>>>>>> Stashed changes
 ## 🚀 Usage
 Please follow these steps to make yourself familiar with the MAN TruckScenes dataset:
 - Read the [dataset description](https://www.man.eu/truckscenes/).
@@ -77,11 +65,8 @@ Please follow these steps to make yourself familiar with the MAN TruckScenes dat
 - Run the [tutorial](./tutorials/truckscenes_tutorial.ipynb) to get started:
 - Read the [MAN TruckScenes paper](https://arxiv.org/abs/2407.07462) for a detailed analysis of the dataset.
 
-<<<<<<< Updated upstream
-=======
 <div id="citation"></div> 
 
->>>>>>> Stashed changes
 ## 📄 Citation
 ```
 @inproceedings{truckscenes2024,
