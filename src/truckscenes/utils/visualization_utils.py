@@ -126,19 +126,22 @@ class TruckScenesExplorer:
             print(f"sample_annotation_token: {ann_record['token']}"
                   f", category: {ann_record['category_name']}")
 
-    def get_scenes_weather_annotations_filtered(self, conditions: List[Tuple[str, str, float]]) -> List[str]:
-        """ 
+    def get_scenes_weather_annotations_filtered(
+            self,
+            conditions: List[Tuple[str, str, float]]
+    ) -> List[str]:
+        """
         Filters scenes based on annotated weather conditions and returns matching scene tokens.
-        
+
         Arguments:
             conditions: List of tuples (field, operator, value) where:
                 - field: Weather field name (any field from weather_annotation except 'token')
                 - operator: Comparison operator ('<', '>', '<=', '>=', '==', '!=')
                 - value: Numeric threshold value
-                
+
         Returns:
             List of scene tokens that match all conditions.
-            
+
         Example:
             # Find scenes with wind between 2 and 5, and temperature > 1.0
             conditions = [
@@ -151,17 +154,20 @@ class TruckScenesExplorer:
         # Check if weather_annotation has data, which it hasn't for versions <1.1
         if not self.trucksc.weather_annotation:
             return []
-        
+
         # Get valid fields from weather_annotation data (excluding 'token')
         valid_fields = set(self.trucksc.weather_annotation[0].keys()) - {'token'}
         valid_operators = {'<', '>', '<=', '>=', '==', '!='}
-        
+
         # Validate all conditions
         for field, operator, value in conditions:
-            assert field in valid_fields, f"Invalid field '{field}'. Valid fields: {valid_fields}"
-            assert operator in valid_operators, f"Invalid operator '{operator}'. Valid operators: {valid_operators}"
-            assert isinstance(value, (int, float)), f"Value must be numeric, got {type(value)}"
-        
+            assert field in valid_fields, \
+                f"Invalid field '{field}'. Valid fields: {valid_fields}"
+            assert operator in valid_operators, \
+                f"Invalid operator '{operator}'. Valid operators: {valid_operators}"
+            assert isinstance(value, (int, float)), \
+                f"Value must be numeric, got {type(value)}"
+
         def _evaluate_condition(field_value: float, operator: str, threshold: float) -> bool:
             """Evaluate a single condition."""
             if operator == '<':
@@ -177,13 +183,13 @@ class TruckScenesExplorer:
             elif operator == '!=':
                 return abs(field_value - threshold) >= 1e-6  # Float inequality with tolerance
             return False
-        
+
         matching_scenes = []
-        
+
         for scene_record in self.trucksc.scene:
             weather_token = scene_record['weather_annotation_token']
             weather_record = self.trucksc.get('weather_annotation', weather_token)
-            
+
             # Check if scene matches all conditions
             matches_all = True
             for field, operator, value in conditions:
@@ -191,36 +197,41 @@ class TruckScenesExplorer:
                 if not _evaluate_condition(field_value, operator, value):
                     matches_all = False
                     break
-            
+
             if matches_all:
                 matching_scenes.append(scene_record['token'])
-        
+
         return matching_scenes
 
-    def get_scenes_description_filtered(self, conditions: List[Tuple[str, str]]) -> List[str]:
-        """ 
+    def get_scenes_description_filtered(
+            self,
+            conditions: List[Tuple[str, str]]
+    ) -> List[str]:
+        """
         Filters scenes based on description keywords and returns matching scene tokens.
-        
+
         Arguments:
             conditions: List of tuples (keyword, operator) where:
                 - keyword: String to search for in scene description
                 - operator: Comparison operator ('==' for contains, '!=' for not contains)
-                
+
         Returns:
             List of scene tokens that match all conditions.
         """
         valid_operators = {'==', '!='}
-        
+
         # Validate all conditions
         for keyword, operator in conditions:
-            assert isinstance(keyword, str), f"Keyword must be string, got {type(keyword)}"
-            assert operator in valid_operators, f"Invalid operator '{operator}'. Valid operators: {valid_operators}"
-        
+            assert isinstance(keyword, str), \
+                f"Keyword must be string, got {type(keyword)}"
+            assert operator in valid_operators, \
+                f"Invalid operator '{operator}'. Valid operators: {valid_operators}"
+
         matching_scenes = []
-        
+
         for scene_record in self.trucksc.scene:
             description = scene_record['description']
-            
+
             # Check if scene matches all conditions
             matches_all = True
             for keyword, operator in conditions:
@@ -232,10 +243,10 @@ class TruckScenesExplorer:
                     if keyword in description:
                         matches_all = False
                         break
-            
+
             if matches_all:
                 matching_scenes.append(scene_record['token'])
-        
+
         return matching_scenes
 
     def map_pointcloud_to_image(self,

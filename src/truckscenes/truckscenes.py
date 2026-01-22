@@ -105,11 +105,13 @@ class TruckScenes:
     def __load_table__(self, table_name) -> dict:
         """ Loads a table. """
         table_path = osp.join(self.table_root, '{}.json'.format(table_name))
-        
+
         if table_name == 'weather_annotation' and not osp.exists(table_path):
-            warnings.warn("weather_annotations.json was not found. It's available starting from v1.1")
+            warnings.warn(
+                "weather_annotations.json was not found. It's available starting from v1.1"
+            )
             return []
-        
+
         with open(table_path) as f:
             table = json.load(f)
         return table
@@ -501,10 +503,16 @@ class TruckScenes:
     def list_sample(self, sample_token: str) -> None:
         self.explorer.list_sample(sample_token)
 
-    def get_scenes_weather_annotations_filtered(self, conditions: List[Tuple[str, str, float]]) -> List[str]:
+    def get_scenes_weather_annotations_filtered(
+            self,
+            conditions: List[Tuple[str, str, float]]
+    ) -> List[str]:
         return self.explorer.get_scenes_weather_annotations_filtered(conditions)
 
-    def get_scenes_description_filtered(self, conditions: List[Tuple[str, str]]) -> List[str]:
+    def get_scenes_description_filtered(
+            self,
+            conditions: List[Tuple[str, str]]
+    ) -> List[str]:
         return self.explorer.get_scenes_description_filtered(conditions)
 
     def render_pointcloud_in_image(self, sample_token: str, dot_size: int = 5,

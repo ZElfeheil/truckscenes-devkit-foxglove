@@ -326,7 +326,7 @@ class RadarPointCloud(PointCloud):
                            radar_data["rcs"]], dtype=np.float64)
 
         return cls(points)
-    
+
     def rotate(self, rot_matrix: np.ndarray) -> None:
         """
         Applies a rotation.
@@ -347,7 +347,8 @@ class RadarPointCloud(PointCloud):
             np.vstack((self.points[:3, :], np.ones(self.nbr_points())))
         )[:3, :]
         # Transform the velocity vectors
-        self.points[3:6, :] = np.dot(np.hstack((transf_matrix[:, :3], np.identity(4)[:, 3][:, None])),
+        self.points[3:6, :] = np.dot(
+            np.hstack((transf_matrix[:, :3], np.identity(4)[:, 3][:, None])),
             np.vstack((self.points[3:6, :], np.ones(self.nbr_points())))
         )[:3, :]
 
