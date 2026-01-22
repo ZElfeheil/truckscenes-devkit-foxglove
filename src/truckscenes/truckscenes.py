@@ -50,7 +50,8 @@ class TruckScenes:
         self.verbose = verbose
         self.table_names = ['attribute', 'calibrated_sensor', 'category', 'ego_motion_cabin',
                             'ego_motion_chassis', 'ego_pose', 'instance', 'sample',
-                            'sample_annotation', 'sample_data', 'scene', 'sensor', 'visibility']
+                            'sample_annotation', 'sample_data', 'scene', 'sensor', 'visibility',
+                            'weather_annotation']
 
         assert osp.exists(self.table_root), \
             f'Database version not found: {self.table_root}'
@@ -73,6 +74,7 @@ class TruckScenes:
         self.scene = self.__load_table__('scene')
         self.sensor = self.__load_table__('sensor')
         self.visibility = self.__load_table__('visibility')
+        self.weather_annotation = self.__load_table__('weather_annotation')
 
         # Initialize the colormap which maps from class names to RGB values.
         self.colormap = colormap.get_colormap()
@@ -102,7 +104,13 @@ class TruckScenes:
 
     def __load_table__(self, table_name) -> dict:
         """ Loads a table. """
-        with open(osp.join(self.table_root, '{}.json'.format(table_name))) as f:
+        table_path = osp.join(self.table_root, '{}.json'.format(table_name))
+        
+        if table_name == 'weather_annotation' and not osp.exists(table_path):
+            warnings.warn("weather_annotations.json was not found. It's available starting from v1.1")
+            return []
+        
+        with open(table_path) as f:
             table = json.load(f)
         return table
 
@@ -492,6 +500,12 @@ class TruckScenes:
 
     def list_sample(self, sample_token: str) -> None:
         self.explorer.list_sample(sample_token)
+
+    def get_scenes_weather_annotations_filtered(self, conditions: List[Tuple[str, str, float]]) -> List[str]:
+        return self.explorer.get_scenes_weather_annotations_filtered(conditions)
+
+    def get_scenes_description_filtered(self, conditions: List[Tuple[str, str]]) -> List[str]:
+        return self.explorer.get_scenes_description_filtered(conditions)
 
     def render_pointcloud_in_image(self, sample_token: str, dot_size: int = 5,
                                    pointsensor_channel: str = 'LIDAR_LEFT',
