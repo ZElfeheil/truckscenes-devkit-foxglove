@@ -18,6 +18,7 @@ World's First Public Dataset For Autonomous Trucking
 - [Installation](#installation)
 - [Setup](#setup)
 - [Usage](#usage)
+- [Foxglove Streaming](#foxglove-streaming)
 - [Citation](#citation)
 
 <div id="website"></div>  
@@ -64,6 +65,62 @@ Please follow these steps to make yourself familiar with the MAN TruckScenes dat
 - Make yourself familiar with the [dataset schema](./docs/schema_truckscenes.md)
 - Run the [tutorial](./tutorials/truckscenes_tutorial.ipynb) to get started:
 - Read the [MAN TruckScenes paper](https://arxiv.org/abs/2407.07462) for a detailed analysis of the dataset.
+
+<div id="foxglove-streaming"></div> 
+
+## 🔌 Foxglove Streaming
+
+This fork adds **real-time streaming to [Foxglove Studio](https://foxglove.dev/)** via WebSocket for interactive 3D visualization.
+
+### Features
+- ✅ **Camera streams** - All 6 cameras with full resolution JPEG
+- ✅ **Lidar point clouds** - Individual topics per sensor (green spheres)
+- ✅ **Radar point clouds** - Individual topics per sensor (orange spheres)
+- ✅ **3D bounding boxes** - Object annotations with category-colored boxes
+- ✅ **Text labels** - Object class labels above bounding boxes
+- ✅ **TF transforms** - Frame positioning for 3D view
+- ✅ **Camera calibration** - CameraInfo topics for proper image display
+
+### Installation
+```bash
+pip install foxglove-websocket  # Required only for Foxglove streaming
+```
+
+### Usage
+```bash
+# Normal visualization (original devkit behavior)
+python -m truckscenes
+
+# Render specific scene
+python -m truckscenes --scene 2
+
+# Stream to Foxglove Studio
+python -m truckscenes --foxglove
+
+# Custom port and data path
+python -m truckscenes --foxglove --port 9090 --dataroot /path/to/data
+```
+
+### Foxglove Topics
+
+| Topic | Type | Description |
+|-------|------|-------------|
+| `/camera/CAMERA_*` | CompressedImage | Camera images (6 cameras) |
+| `/camera/CAMERA_*/camera_info` | CameraCalibration | Camera intrinsics |
+| `/lidar/LIDAR_*` | SceneUpdate | Lidar point clouds (5 sensors) |
+| `/radar/RADAR_*` | SceneUpdate | Radar point clouds (6 sensors) |
+| `/annotations` | SceneUpdate | 3D bounding boxes with labels |
+| `/tf` | FrameTransforms | Coordinate frame transforms |
+
+### Quick Start
+1. Start the server: `python -m truckscenes --foxglove`
+2. Open [Foxglove Studio](https://studio.foxglove.dev/)
+3. Connect to `ws://localhost:8765`
+4. Add panels:
+   - **Image panel** → select a camera topic
+   - **3D panel** → enable `/annotations`, lidar, and radar topics
+
+---
 
 <div id="citation"></div> 
 
